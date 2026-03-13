@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #111118;
+  --bg-card: #16161f;
+  --text-primary: #f0f0f5;
+  --text-secondary: #9898a8;
+  --border: #2a2a3a;
+  --glow: rgba(99, 102, 241, 0.15);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-glow {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.card-glow:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 30px var(--glow);
+}
+
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.cypher-block {
+  background: #1a1a2e;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+.cypher-keyword { color: #6366f1; font-weight: 600; }
+.cypher-label { color: #f59e0b; }
+.cypher-property { color: #34d399; }
+.cypher-string { color: #fb923c; }
+.cypher-comment { color: #6b7280; font-style: italic; }
+
+.arch-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.arch-box:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--glow);
+}
+
+.arch-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 1.5rem;
+  padding: 0.5rem 0;
+}
