@@ -1,125 +1,95 @@
-"use client";
-
-import { useState } from "react";
-
 const capabilities = [
-  "Graph DB",
-  "Vector Search",
-  "Observability",
-  "Governance",
-  "Access Control",
+  "Graph Traversal",
+  "Vector ANN",
+  "BM25 Full-Text",
+  "OLAP Analytics",
+  "Time-Series",
   "Geospatial",
-  "GRC / Compliance",
-  "ML Training & Serving",
+  "RBAC Pre-Filter",
+  "PromQL Compat",
+  "Distributed",
+  "Open Source",
 ];
 
-type Support = "full" | "partial" | "none";
+type Score = "full" | "partial" | "none";
 
-interface Competitor {
-  name: string;
-  caps: Support[];
-  notes: string;
-}
-
-const competitors: Competitor[] = [
-  {
-    name: "Neo4j",
-    caps: ["full", "partial", "none", "none", "partial", "none", "none", "none"],
-    notes: "Graph-only. Single-machine RAM ceiling. No native vector, observability, or governance.",
-  },
-  {
-    name: "Pinecone",
-    caps: ["none", "full", "none", "none", "none", "none", "none", "none"],
-    notes: "Vector-only. No graph relationships, no access control, no lineage tracking.",
-  },
-  {
-    name: "Datadog",
-    caps: ["none", "none", "full", "none", "none", "none", "none", "none"],
-    notes: "Observability-only. Per-metric cardinality pricing. No graph or vector capabilities.",
-  },
-  {
-    name: "Snowflake",
-    caps: ["partial", "partial", "none", "partial", "partial", "none", "none", "partial"],
-    notes: "SQL warehouse. Limited graph support. No native observability or geospatial. Snowpark ML is partial.",
-  },
-  {
-    name: "Vanta / Diligent",
-    caps: ["none", "none", "none", "partial", "partial", "none", "full", "none"],
-    notes: "GRC-only. Built on stitched-together data systems under the hood.",
-  },
-  {
-    name: "FalkorDB",
-    caps: ["full", "partial", "none", "none", "none", "none", "none", "none"],
-    notes: "Graph with vector add-on. No observability, governance, geospatial, or GRC.",
-  },
-  {
-    name: "Databricks",
-    caps: ["partial", "partial", "none", "partial", "partial", "none", "none", "full"],
-    notes: "Strong ML platform, but no native graph, observability, geospatial, or compliance. Graph support is limited.",
-  },
+const competitors: { name: string; scores: Score[] }[] = [
+  { name: "QGRAPH",      scores: ["full","full","full","full","full","full","full","full","full","full"] },
+  { name: "Neo4j",        scores: ["full","partial","full","partial","none","none","none","none","partial","partial"] },
+  { name: "Snowflake",    scores: ["none","none","partial","full","partial","partial","partial","none","full","none"] },
+  { name: "Pinecone",     scores: ["none","full","none","none","none","none","none","none","full","none"] },
+  { name: "Datadog",      scores: ["none","none","partial","partial","full","none","partial","full","full","none"] },
+  { name: "Milvus",       scores: ["none","full","none","none","none","none","none","none","full","full"] },
+  { name: "ClickHouse",   scores: ["none","none","partial","full","full","none","partial","partial","full","full"] },
+  { name: "TigerGraph",   scores: ["full","none","none","partial","none","none","partial","none","full","partial"] },
+  { name: "Weaviate",     scores: ["none","full","full","none","none","none","none","none","partial","full"] },
 ];
 
-const tabs = competitors.map((c) => c.name);
+const dot: Record<Score, { cls: string; char: string }> = {
+  full:    { cls: "text-lg", char: "\u25CF" },
+  partial: { cls: "text-lg opacity-70", char: "\u25D2" },
+  none:    { cls: "text-lg opacity-20", char: "\u25CB" },
+};
 
-function Badge({ level }: { level: Support }) {
-  if (level === "full")
-    return <span className="inline-block rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-medium text-emerald-400">Core</span>;
-  if (level === "partial")
-    return <span className="inline-block rounded bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400">Partial</span>;
-  return <span className="inline-block rounded bg-red-500/10 px-2 py-0.5 text-xs font-medium text-red-400/60">None</span>;
-}
+const dotColor: Record<Score, string> = {
+  full: "var(--accent)",
+  partial: "#FFC107",
+  none: "var(--muted)",
+};
 
 export default function CompetitorGrid() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const comp = competitors[activeIdx];
-
   return (
-    <div>
-      {/* Competitor tabs */}
-      <div className="flex flex-wrap justify-center gap-2 mb-6">
-        {tabs.map((name, i) => (
-          <button
-            key={name}
-            onClick={() => setActiveIdx(i)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-              activeIdx === i
-                ? "bg-[var(--accent)] text-white"
-                : "border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
-
-      {/* Comparison table */}
-      <div className="overflow-x-auto rounded-xl border border-[var(--border)]">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-[var(--border)] bg-[var(--bg-card)]">
-              <th className="px-4 py-3 text-left font-medium text-[var(--text-secondary)]">Capability</th>
-              <th className="px-4 py-3 text-center font-medium gradient-text">QGraph</th>
-              <th className="px-4 py-3 text-center font-medium text-[var(--text-secondary)]">{comp.name}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {capabilities.map((cap, i) => (
-              <tr key={cap} className="border-b border-[var(--border)] last:border-b-0">
-                <td className="px-4 py-3 text-[var(--text-secondary)]">{cap}</td>
-                <td className="px-4 py-3 text-center">
-                  <Badge level="full" />
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <Badge level={comp.caps[i]} />
-                </td>
-              </tr>
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse" style={{ fontSize: "13px" }}>
+        <thead>
+          <tr>
+            <th className="text-left px-4 py-3.5 border-b border-[var(--border)]" style={{ fontFamily: "var(--mono)", fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "var(--muted)" }}>
+              &nbsp;
+            </th>
+            {capabilities.map((c) => (
+              <th key={c} className="text-center px-4 py-3.5 border-b border-[var(--border)]" style={{ fontFamily: "var(--mono)", fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "var(--muted)" }}>
+                {c}
+              </th>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <p className="mt-3 text-center text-xs text-[var(--text-secondary)]">
-        {comp.notes}
-      </p>
+          </tr>
+        </thead>
+        <tbody>
+          {competitors.map((comp) => {
+            const isQGraph = comp.name === "QGRAPH";
+            return (
+              <tr key={comp.name}>
+                <td
+                  className="text-left px-4 py-3.5 border-b"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.03)",
+                    fontFamily: isQGraph ? "var(--heading-font)" : "var(--mono)",
+                    fontSize: isQGraph ? "18px" : "12px",
+                    letterSpacing: isQGraph ? "2px" : "0",
+                    color: isQGraph ? "var(--accent)" : "var(--muted)",
+                    fontWeight: isQGraph ? 600 : 400,
+                    background: isQGraph ? "rgba(0,255,178,0.04)" : "transparent",
+                  }}
+                >
+                  {comp.name}
+                </td>
+                {comp.scores.map((s, i) => (
+                  <td
+                    key={i}
+                    className="text-center px-4 py-3.5 border-b align-middle"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.03)",
+                      background: isQGraph ? "rgba(0,255,178,0.04)" : "transparent",
+                      color: dotColor[s],
+                    }}
+                  >
+                    <span className={dot[s].cls}>{dot[s].char}</span>
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }

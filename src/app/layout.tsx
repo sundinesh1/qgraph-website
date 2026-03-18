@@ -4,12 +4,12 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "QGraph - The Graph Engine for Everything",
+  title: "QGraph — The Safe, Secure, Deterministic OS for Enterprise AI",
   description:
-    "One unified platform for graphs, vectors, time-series, spatial data, and AI. Sub-microsecond queries at petabyte scale.",
+    "Nine products. One engine. 710K+ lines of production Rust. The infrastructure layer the agentic world has been missing.",
   openGraph: {
-    title: "QGraph - The Graph Engine for Everything",
-    description: "Sub-microsecond queries. Petabyte scale. One engine.",
+    title: "QGraph — Nine Products. One Engine. Code Complete.",
+    description: "The safe, secure, deterministic operating system for enterprise AI.",
     type: "website",
   },
 };
