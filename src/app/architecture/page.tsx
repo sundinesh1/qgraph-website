@@ -11,7 +11,7 @@ export default function ArchitecturePage() {
       <p className="mt-3 text-lg text-[var(--text-secondary)]">
         QGraph is designed to eliminate the OS kernel from the data path. Not a wrapper. Not a
         federation layer. A ground-up Rust engine that pushes computation to the theoretical
-        limits of silicon &mdash; RDMA for networking, io_uring for storage, SIMD for compute,
+        limits of silicon &mdash; Arrow Flight for networking, SIMD for compute,
         Arrow for memory layout, Vortex for compression.
       </p>
 
@@ -45,9 +45,9 @@ export default function ArchitecturePage() {
             { layer: "Parser + Binder", detail: "Type resolution, expression binding", color: "text-blue-400" },
             { layer: "Cost-Based Optimizer", detail: "Predicate pushdown, zone map elimination, column pruning", color: "text-purple-400" },
             { layer: "Physical Mapper", detail: "DistributedContext \u2192 remote scan routing, exchange insertion", color: "text-purple-400" },
-            { layer: "Morsel Executor", detail: "Lock-free work-stealing, SIMD + GPU fused kernels, JIT (Cranelift)", color: "text-amber-400" },
+            { layer: "Morsel Executor", detail: "Lock-free work-stealing, SIMD vectorized execution", color: "text-amber-400" },
             { layer: "OLAP Data Plane", detail: "Vortex 11-codec compression, dual-sorted CSR, compound zone maps", color: "text-emerald-400" },
-            { layer: "Transport Layer", detail: "RDMA UCX (1-3\u00b5s) + Arrow Flight (zero serialization) + io_uring (7 GB/s)", color: "text-emerald-400" },
+            { layer: "Transport Layer", detail: "Arrow Flight (zero serialization) + async NVMe I/O (7 GB/s)", color: "text-emerald-400" },
           ].map((row) => (
             <div key={row.layer} className="arch-box flex items-center justify-between">
               <span className={`font-semibold ${row.color}`}>{row.layer}</span>
@@ -76,17 +76,13 @@ export default function ArchitecturePage() {
             </thead>
             <tbody>
               {[
-                { prim: "RDMA UCX", impact: "1-3\u00b5s inter-node. RAM-to-RAM, zero kernel involvement.", status: "Shipped" },
                 { prim: "Arrow Flight", impact: "Zero-serialization distributed shuffle. Arrow IPC on the wire.", status: "Shipped" },
-                { prim: "io_uring SQPOLL", impact: "Zero-syscall NVMe reads. 7 GB/s disk throughput.", status: "Shipped" },
+                { prim: "Async NVMe I/O", impact: "High-throughput disk reads. 7 GB/s throughput.", status: "Shipped" },
                 { prim: "Vortex 11-Codec", impact: "SIMD predicate eval on compressed data. 10-50x compression.", status: "Shipped" },
                 { prim: "NEON SIMD", impact: "128-bit Apple Silicon. SQ8 distance, decompression, filtering.", status: "Shipped" },
                 { prim: "AVX-512", impact: "512-bit x86. Batch decompression, aggregation.", status: "Shipped" },
-                { prim: "Metal GPU", impact: "20 Apple Silicon cores. Spatial, graph, compression kernels.", status: "Shipped" },
                 { prim: "CUDA", impact: "Discrete GPU. Large-batch vector search, Vortex compression.", status: "Shipped" },
-                { prim: "Fused Kernels", impact: "Single-pass decompress\u2192filter\u2192aggregate through L1 cache.", status: "Shipped" },
                 { prim: "Morsel-Driven", impact: "Lock-free work-stealing across all CPU cores.", status: "Shipped" },
-                { prim: "JIT (Cranelift)", impact: "Expression compilation for deep traversals.", status: "Shipped" },
               ].map((row) => (
                 <tr key={row.prim} className="border-b border-[var(--border)] last:border-b-0">
                   <td className="px-4 py-3 font-medium">{row.prim}</td>
@@ -102,7 +98,7 @@ export default function ArchitecturePage() {
         <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
           <p className="text-sm font-semibold text-amber-400 mb-1">Architectural Impossibility for Competitors</p>
           <p className="text-sm text-[var(--text-secondary)]">
-            Neo4j cannot add columnar RDMA without rewriting its JVM storage engine. LanceDB cannot
+            Neo4j cannot add columnar storage without rewriting its JVM storage engine. LanceDB cannot
             add multi-hop traversal without building a graph engine from scratch. Datadog cannot
             unify its three backend stores. Snowflake cannot add graph-native joins. These
             aren&apos;t feature gaps &mdash; they are fundamental architecture incompatibilities that
@@ -147,7 +143,7 @@ RETURN a.name, b.name, c.name
         </p>
         <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-6">
           SIMD predicate evaluation runs directly on compressed data &mdash; no decompression
-          step for filtering. Fused decompress-filter-aggregate kernels execute in a single
+          step for filtering. The decompress-filter-aggregate pipeline executes in a single
           pass through L1 cache, eliminating 3x memory round-trips versus standard pipelines.
         </p>
         <div className="overflow-x-auto rounded-xl border border-[var(--border)]">
@@ -243,7 +239,7 @@ RETURN a.name, b.name, c.name
           </div>
           <div className="card-glow rounded-xl p-5 text-center">
             <div className="text-2xl font-bold text-amber-400">WARM</div>
-            <div className="text-xs text-[var(--text-secondary)] mt-1">NVMe + io_uring</div>
+            <div className="text-xs text-[var(--text-secondary)] mt-1">NVMe + Async I/O</div>
             <div className="text-lg font-semibold gradient-text mt-2">5-50 &micro;s</div>
             <p className="mt-2 text-xs text-[var(--text-secondary)]">
               Zero-syscall async reads at 7 GB/s throughput

@@ -32,9 +32,9 @@ export default function ArchitectureDiagram() {
         </div>
         <div className="arch-box">
           <div className="mb-1 text-2xl">&#127760;</div>
-          <div className="text-sm font-semibold">RDMA Fabric</div>
+          <div className="text-sm font-semibold">Arrow Flight Fabric</div>
           <div className="mt-1 text-xs text-[var(--text-secondary)]">
-            Microsecond cross-node communication
+            Zero-serialization distributed shuffle
           </div>
         </div>
       </div>

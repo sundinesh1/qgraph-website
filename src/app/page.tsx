@@ -810,7 +810,7 @@ export default function HomePage() {
                         letterSpacing: "1px",
                       }}
                     >
-                      ZERO-COPY ARROW &middot; RDMA &middot; io_uring &middot; Vortex 11-codec
+                      ZERO-COPY ARROW &middot; ARROW FLIGHT &middot; SIMD &middot; Vortex 11-codec
                     </div>
                   </div>
                   <div

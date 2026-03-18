@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: "How fast is it really?",
-    a: "Sub-microsecond graph hop latency (375ns). Vector search with graph re-ranking at 10K+ QPS. PromQL queries over billions of time-series points in milliseconds. The engine uses SIMD, zero-copy Arrow memory, io_uring for async I/O, and Vortex 11-codec compression. No serialization tax between any internal boundary.",
+    a: "Sub-microsecond graph hop latency (375ns). Vector search with graph re-ranking at 10K+ QPS. PromQL queries over billions of time-series points in milliseconds. The engine uses SIMD, zero-copy Arrow memory, and Vortex 11-codec compression. No serialization tax between any internal boundary.",
   },
 ];
 

@@ -25,7 +25,7 @@ const competitors = [
     olap: "Poor",
     security: "Software-level",
     limitation: "TigerGraph requires you to write queries in GSQL, which it then compiles into C++ before executing. This compilation step eliminates real-time, ad-hoc query velocity — every new analytical question requires a compile-deploy cycle. More critically, TigerGraph is extremely RAM-hungry. If your graph exceeds available memory, performance degrades dramatically.",
-    advantage: "QGraph executes dynamic Cypher queries instantly via JIT-compiled traversal kernels — no C++ compilation step. More importantly, QGraph uses tiered storage that streams data directly from NVMe into the compute engine. We process graphs far larger than RAM at bare-metal speeds without requiring massive, expensive memory clusters.",
+    advantage: "QGraph executes dynamic Cypher queries instantly via vectorized traversal kernels — no C++ compilation step. More importantly, QGraph uses tiered storage that streams data directly from NVMe into the compute engine. We process graphs far larger than RAM at bare-metal speeds without requiring massive, expensive memory clusters.",
   },
   {
     name: "StarRocks",
